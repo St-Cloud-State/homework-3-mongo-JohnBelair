@@ -1,0 +1,16 @@
+1. Explain how this enhancement can be achieved by supplementing our previous
+application with a document database. Describe how the form of a document will be
+modified as we perform each enhancement.
+
+-In a document database we can add this notes enhancement by using the JSON formated documents typically used in a document database. We can start of with a basic document that adds a name and address to the document when it created and has other details like status and messages. 
+-Then for the processing phase we can have a messages for each subphase depending on the state of the subphase.
+-If the application is accepted we can add loan terms to the document.
+-If the application is rejected we can add a reason why.
+-When we look-up each document we display each message regardless of location since it is all located on the same document.
+
+2. Describe how you will use the Mongo commands to achieve these modifications.
+
+-To add new documents we can use the .insertOne command to add a new document.
+-To update the documents throughout the processing phase, with acceptance or rejection and with any messages that need to be added we can use the .updateOne command.
+-To query the document database for the document with a specific ID we can use the .findOne command.
+

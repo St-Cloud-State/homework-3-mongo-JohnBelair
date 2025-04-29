@@ -1,6 +1,6 @@
 const applications = [];
 
-function processApplication() {
+function addApplication() {
     const applicantName = document.getElementById('applicantName').value;
     const applicantZipcode = document.getElementById('applicantZipcode').value;
 
@@ -45,9 +45,24 @@ function checkApplicationStatus() {
             const application = data.application;
 
             if (application) {
-                document.getElementById('statusText').innerHTML = `
+                let statusText = `
                     <h3>Application Found Successfully!</h3>
                     <p>Your application status is: ${application.status}</p>`;
+            
+                if (application["sub-status"]) {
+                    statusText += `<p>Sub-status: ${application["sub-status"]}</p>`;
+                }
+            
+                if (application["processing message"]) {
+                    statusText += `<p>Processing Message: ${application["processing message"]}</p>`;
+                }
+
+                if (application["notes"]) {
+                    statusText += `<p>Notes: ${application["notes"]}</p>`;
+                }
+                
+                document.getElementById('statusText').innerHTML = statusText;
+
             } else {
                 document.getElementById('statusText').innerHTML = `
                     <h3>Application Not Found</h3>`;
@@ -59,23 +74,18 @@ function checkApplicationStatus() {
         });
 }
 
-function changeApplicationStatus() {
+function processApplication() {
     const applicationNumber = document.getElementById('applicationNumber').value;
-    const applicationStatus = document.getElementById('applicationStatus').value;
+    const subStatus = document.getElementById('subStatus').value;
+    const processingMessage = document.getElementById('processingMessage').value;
 
     const applicationData = {
         application_number: applicationNumber,
-        status: applicationStatus
+        sub_status : subStatus,
+        processing_message : processingMessage
     };
 
-    const validStatuses = ['not found', 'received', 'processing', 'accepted', 'rejected'];
-
-    if (!validStatuses.includes(applicationStatus)) {
-        alert('Invalid Status! Allowed statuses are: not found, received, processing, accepted, rejected.');
-        return;
-    }
-
-    fetch('/api/set_application_status', {
+    fetch('/api/process_application', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -85,11 +95,10 @@ function changeApplicationStatus() {
     .then(response => response.json())
     .then(data => {
         if (data.application) {
-            document.getElementById('updateText').innerHTML = `
-                <h3>Application Status Updated Successfully!</h3>
-                <p>New status: ${data.application.status}</p>`;
+            document.getElementById('processText').innerHTML = `
+                <h3>Application Status Updated Successfully!</h3>`;
         } else {
-            document.getElementById('updateText').innerHTML = `
+            document.getElementById('processText').innerHTML = `
                 <h3>Application Status Not Valid</h3>`;
         }
     })
@@ -98,4 +107,69 @@ function changeApplicationStatus() {
         console.error('Error updating application status:', error);
     });
 
+}
+
+function acceptApplication(){
+    const applicationNumber = document.getElementById('applicationNumber').value;
+    const notes = document.getElementById('acceptNotes').value;
+
+    const applicationData = {
+        application_number: applicationNumber,
+        notes: notes
+
+    };
+
+    fetch('/api/accept_application', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(applicationData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.application) {
+            document.getElementById('acceptText').innerHTML = `
+                <h3>Application Status Updated Successfully!</h3>`;
+        } else {
+            document.getElementById('acceptText').innerHTML = `
+                <h3>Application Status Not Valid</h3>`;
+        }
+    })
+
+    .catch(error => {
+        console.error('Error updating application status:', error);
+    });
+}
+
+function rejectApplication(){
+    const applicationNumber = document.getElementById('applicationNumber').value;
+    const notes = document.getElementById('rejectNotes').value;
+
+    const applicationData = {
+        application_number: applicationNumber,
+        notes: notes
+    };
+
+    fetch('/api/reject_application', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(applicationData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.application) {
+            document.getElementById('rejectText').innerHTML = `
+                <h3>Application Status Updated Successfully!</h3>`;
+        } else {
+            document.getElementById('rejectText').innerHTML = `
+                <h3>Application Status Not Valid</h3>`;
+        }
+    })
+
+    .catch(error => {
+        console.error('Error updating application status:', error);
+    });
 }

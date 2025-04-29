@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <title>Acme Financial Corp</title>
+</head>
+
+<body>
+    <h1>Program Application</h1>
+	
+    <div id="processApplication">
+        <h2>Enter Name and Zipcode:</h2>
+        <input type="text" id="applicantName" placeholder="Applicant Name">
+        <input type="text" id="applicantZipcode" placeholder="Applicant Zipcode">
+        <button onclick="processApplication()">Apply</button>
+    </div>
+
+
+    <div id="conformationText">
+    </div>
+
+    <h1>Check Application Status</h1>
+	
+    <div id="checkStatus">
+        <h2>Enter Application Number:</h2>
+        <input type="text" id="applicationNumber" placeholder="Application Number">
+        <button onclick="checkApplicationStatus()">Check</button>
+    </div>
+
+
+    <div id="statusText">
+    </div>
+
+    <h1>Change Application Status</h1>
+	
+    <div id="changeStatus">
+        <h2>Enter Application Number and New Status:</h2>
+        <input type="text" id="applicationNumber" placeholder="Application Number">
+        <input type="text" id="applicationStatus" placeholder="Application Status">
+        <button onclick="changeApplicationStatus()">Change</button>
+    </div>
+
+    <div id="updateText">
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
